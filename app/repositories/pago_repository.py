@@ -1,6 +1,7 @@
 from app import db
 from app.models.pago import Pago
 
+
 class PagoRepository:
 
     @staticmethod
@@ -11,16 +12,15 @@ class PagoRepository:
         return nuevo_pago
 
     @staticmethod
-    def obtener_pago_por_producto_id(producto_id):  # Nuevo método para obtener pago por producto_id
-        return Pago.query.filter_by(producto_id=producto_id).first()  # Obtiene el primer pago que coincide
-    
-    @staticmethod
-    def obtener_todos_los_pagos():  #find_all
-        return Pago.query.all()
+    def obtener_pago_por_producto_id(id):
+        return Pago.query.filter(Pago.id == id).first()
 
     @staticmethod
-    def eliminar_pago(pago_id):
-        pago = Pago.query.get(pago_id)
-        if pago:
-            db.session.delete(pago)
-            db.session.commit()
+    def obtener_todos_los_pagos():  # find_all
+        return db.session.query(Pago).all()
+
+    @staticmethod
+    def eliminar_pago(pago):
+        db.session.delete(pago)
+        db.session.commit()
+        return pago

@@ -5,13 +5,22 @@ from app.services.ms_pago import PagoService
 
 pago_bp = Blueprint("pago", __name__)
 pago_service = PagoService()
+pago_repository = PagoRepository()
 
 
 @pago_bp.route("/pago", methods=["GET"])
 # agregar documentacion
 def index():
     # agregar inventario index
-    return "DIOS SOY YO DE NUEVO y este es el microservicio de pagos", 200
+    return ".", 200
+
+
+# borrar
+@pago_bp.route("/pago/eliminar/<int:pago_id>", methods=["DELETE"])
+def eliminar_pago(pago_id):
+    """Elimina un pago por id."""
+    pago_service.eliminar_pago(pago_id)
+    return jsonify({"message": "Pago eliminado"}), 200
 
 
 @pago_bp.route("/pago", methods=["POST"])
@@ -56,19 +65,15 @@ def obtener_pago(producto_id):
 @pago_bp.route("/pago/todos", methods=["GET"])  # Nuevo endpoint
 def obtener_todos_los_pagos():
     """Obtiene todos los pagos existentes."""
-    pagos = pago_service.obtener_todos_los_pagos()
-    return (
-        jsonify(
+    pagos = pago_repository.obtener_todos_los_pagos()
+    return jsonify(
+        [
             {
-                "pagos": [
-                    {
-                        "producto_id": pago.producto_id,
-                        "precio": pago.precio,
-                        "medio_pago": pago.medio_pago,
-                    }
-                    for pago in pagos
-                ]
+                "id": pago.id,
+                "producto_id": pago.producto_id,
+                "precio": pago.precio,
+                "medio_pago": pago.medio_pago,
             }
-        ),
-        200,
+            for pago in pagos
+        ]
     )
