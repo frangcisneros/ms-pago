@@ -11,8 +11,6 @@ class Config(object):
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
-
     @staticmethod
     def init_app(app):
         pass
@@ -22,13 +20,14 @@ class DevelopmentConfig(Config):
     TESTING = True
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_DEV_URL")
     SQLALCHEMY_ENGINE_OPTIONS = {
         "connect_args": {
-            "options": "-csearch_path=pago_schema"  # Cambia esto según el microservicio
+            "options": "-csearch_path=pago_schema"
         }
     }
     CACHE_REDIS_URL = os.getenv('REDIS_URL')
+
 
 class TestConfig(Config):
     TESTING = True
@@ -37,7 +36,7 @@ class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_TEST_URL")
     SQLALCHEMY_ENGINE_OPTIONS = {
         "connect_args": {
-            "options": "-csearch_path=compras_schema"  # Cambia esto según el microservicio
+            "options": "-csearch_path=pago_schema"
         }
     }
     CACHE_REDIS_URL = os.getenv('REDIS_URL')
@@ -49,7 +48,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_PROD_URL")
     SQLALCHEMY_ENGINE_OPTIONS = {
         "connect_args": {
-            "options": "-csearch_path=main_schema"  # Cambia esto según el esquema que uses
+            "options": "-csearch_path=pago_schema"
         }
     }
     CACHE_REDIS_URL = os.getenv('REDIS_URL')
